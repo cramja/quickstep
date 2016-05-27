@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -222,6 +223,7 @@ void TextScanWorkOrder::execute() {
       }
       column_vectors.addColumn(column.release());
     }
+    ++attr_id;
   }
 
   // Bulk insert the tuples.
