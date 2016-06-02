@@ -30,6 +30,7 @@
 #include "storage/TupleReference.hpp"
 #include "storage/TupleStorageSubBlock.hpp"
 #include "storage/ValueAccessor.hpp"
+#include "utility/EventProfiler.hpp"
 
 #include "glog/logging.h"
 
@@ -98,6 +99,9 @@ bool BuildHashOperator::getAllWorkOrders(
 }
 
 void BuildHashWorkOrder::execute() {
+  auto &container = *simple_profiler.getContainer();
+  container.startEvent("buildhash");
+
   BlockReference block(
       storage_manager_->getBlock(build_block_id_, input_relation_));
 
@@ -118,6 +122,8 @@ void BuildHashWorkOrder::execute() {
 
   CHECK(result == HashTablePutResult::kOK)
       << "Failed to add entries to join hash table.";
+
+  container.endEvent("buildhash");
 }
 
 }  // namespace quickstep

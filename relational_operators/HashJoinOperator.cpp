@@ -46,6 +46,7 @@
 #include "types/TypedValue.hpp"
 #include "types/containers/ColumnVector.hpp"
 #include "types/containers/ColumnVectorsValueAccessor.hpp"
+#include "utility/EventProfiler.hpp"
 
 #include "gflags/gflags.h"
 #include "glog/logging.h"
@@ -387,11 +388,14 @@ bool HashJoinOperator::getAllOuterJoinWorkOrders(
 }
 
 void HashInnerJoinWorkOrder::execute() {
+  auto &container = *simple_profiler.getContainer();
+  container.startEvent("hashjoin");
   if (FLAGS_vector_based_joined_tuple_collector) {
     executeWithCollectorType<VectorBasedJoinedTupleCollector>();
   } else {
     executeWithCollectorType<MapBasedJoinedTupleCollector>();
   }
+  container.endEvent("hashjoin");
 }
 
 template <typename CollectorT>
