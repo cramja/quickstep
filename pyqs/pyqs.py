@@ -150,7 +150,7 @@ def query(qstr):
   if DEBUG:
     print("{} < '{}'".format(" ".join([qs_exe] + flags()), qstr))
 
-  qs = sp.Popen([qs_exe] + flags(), stdin=sp.PIPE, stdout=sp.PIPE)
+  qs = sp.Popen([qs_exe] + flags(), stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE)
   qout, qerr = qs.communicate(qstr)
 
   # An error indicates that quickstep hard crashed.
